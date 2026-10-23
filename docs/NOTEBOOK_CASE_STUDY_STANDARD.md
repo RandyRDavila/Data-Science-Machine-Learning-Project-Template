@@ -1,8 +1,29 @@
 # Notebook case-study standard
 
-Project notebooks are executable technical articles backed by the project
-package. They should combine the accessibility of a strong public data-science
-article with the evidence and restraint expected in a professional analysis.
+Project notebooks are self-contained, executable technical case studies backed
+by the project package. They should combine the accessibility of a strong
+public data-science article with the evidence and restraint expected in a
+professional analysis. The student supplies the decisions and intellectual
+work; the template supplies a sequence of questions that prevents important
+professional steps from disappearing.
+
+A notebook uses data analysis and machine learning to answer a real-world or
+scientific question. It may use one algorithm or a justified mixture of
+algorithms. The unit of organization is the investigation, not the syllabus:
+methods belong together only when their comparison or composition answers one
+governing question.
+
+## Reader contract
+
+Assume the reader knows basic Python and course mathematics but has not heard
+the lecture, seen the data, or watched the team work. Define notation before
+using it. Introduce code by explaining what question it answers. Interpret the
+output immediately afterward. Make transitions explicit so the report reads as
+an argument rather than a sequence of cells.
+
+Prompts in the guided template are minimum obligations, not requested phrases.
+Replace them with domain-specific prose and analysis; do not submit the prompts
+themselves.
 
 ## Required narrative arc
 
@@ -33,6 +54,10 @@ Every substantial notebook should let a reader answer these questions in order:
    or concept drift.
 9. **What follows?** Give a bounded conclusion, limitations, responsible-use
    statement, next experiment, and production consequence.
+
+The notebook must also identify the student-authored package symbols and tests
+that support the analysis. A result without an inspectable implementation and
+verification path is incomplete evidence.
 
 ## Code boundary
 

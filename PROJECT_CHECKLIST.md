@@ -30,6 +30,10 @@
 
 ## Required evidence
 
+- [ ] Every project notebook tells one coherent, self-contained story about an
+      algorithm or justified mixture of algorithms on the chosen data.
+- [ ] Every **STUDENT WORK** prompt from the guided template has been replaced
+      with domain-specific reasoning, code, evidence, and conclusions.
 - [ ] Student notebooks under `notebooks/` follow the case-study standard and
       call reusable project-package code on the configured dataset.
 - [ ] Each method report includes purposeful exploration, mathematical

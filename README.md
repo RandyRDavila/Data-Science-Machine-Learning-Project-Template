@@ -11,6 +11,10 @@ reviewed, reproducible, deployable, and observable software.
 > course algorithms, write tests, compare your work with trusted libraries,
 > and promote reviewed code through an experiment-to-production workflow.
 
+Read [`ASSIGNMENT.md`](ASSIGNMENT.md) before changing the template. It defines
+the final product and, in particular, what students must write in each guided
+algorithm or multi-algorithm case study.
+
 ## What you inherit and what you own
 
 The untouched template already runs this vertical slice:
@@ -190,14 +194,15 @@ For each applicable course algorithm:
 The included `BatchLinearRegressor` is the standard to study first. It is a
 transparent exemplar, not permission to copy and rename an implementation.
 
-## 6. Use notebooks as experimental reports
+## 6. Build self-contained applied case studies
 
 Follow the full
 [`notebook case-study standard`](docs/NOTEBOOK_CASE_STUDY_STANDARD.md). The goal
 is an accessible technical article backed by professional package code—not a
 code dump and not an unreviewed production system living in notebook state.
 
-The `examples/` notebooks cover the course families and execute in CI:
+The completed `examples/` notebooks cover the course families and execute in
+CI:
 
 - data and task contracts;
 - linear and logistic regression;
@@ -209,11 +214,20 @@ The `examples/` notebooks cover the course families and execute in CI:
 - clustering; and
 - dimensionality reduction.
 
-Create project notebooks under `notebooks/` by adapting the reasoning pattern,
-not by editing the reference notebooks into one enormous stateful file. A project notebook should
-load package functions, state a question, display relevant evidence, explain a
-conclusion, and restart successfully from top to bottom. Training, validation,
-API, and monitoring logic belongs under `src/` or `scripts/`.
+Create project notebooks under `notebooks/` from
+[`00-guided-case-study-template.ipynb`](notebooks/00-guided-case-study-template.ipynb).
+Each notebook must use data analysis and machine learning to answer one real
+scientific, engineering, social, or operational question on the team's chosen
+data. It may use one algorithm or a justified mixture of algorithms. Students
+must make and defend the data, modeling, metric, diagnostic, and promotion
+choices; the template guides the sequence without supplying those answers.
+
+The notebook must define its question and notation, explain what each important
+code cell is doing and why, interpret evidence in prose, identify failures, and
+reach a bounded conclusion. It must restart successfully from top to bottom.
+Training, validation, API, and monitoring behavior belongs under `src/` or
+`scripts/`; the notebook imports that tested behavior and explains what it
+reveals.
 
 ## 7. Work like a software team
 
@@ -318,8 +332,8 @@ artifacts with checksums, and publishes a GitHub release.
 | `configs/` | Versioned experiment and data-boundary declarations |
 | `data/local/` | Ignored student data; never committed |
 | `data/fixtures/` | Small CI-safe schema and failure examples |
-| `examples/` | Executable instructional and project reports |
-| `notebooks/` | Student-authored, article-style project case studies |
+| `examples/` | Completed course-topic case studies; reference only |
+| `notebooks/` | Guided, self-contained student case studies on chosen data |
 | `src/dsm_project/data/` | Adapters, validation, provenance, and tasks |
 | `src/dsm_project/algorithms/student/` | Student-authored course algorithms |
 | `src/dsm_project/algorithms/registry.py` | Explicit bridge from student code to the system |

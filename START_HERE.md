@@ -1,5 +1,9 @@
 # Start here
 
+Read [`ASSIGNMENT.md`](ASSIGNMENT.md) first. The final project is one coherent
+data product supported by tested package code and self-contained case-study
+notebooks—not a folder of unrelated model calls.
+
 ## 1. Create your project repository
 
 Use **Use this template** on GitHub. Choose a descriptive repository name and
@@ -56,9 +60,11 @@ direction: notebooks may orchestrate, visualize, and explain, but product
 behavior belongs under `src/`. Do not copy large notebook cells into production
 modules without first designing and testing their interfaces.
 
-Create project reports under `notebooks/` and follow
-`docs/NOTEBOOK_CASE_STUDY_STANDARD.md`. Each report should teach the method,
-explore the configured project dataset, use student package code, compare with
+Create project reports under `notebooks/` from
+`notebooks/00-guided-case-study-template.ipynb` and follow
+`docs/NOTEBOOK_CASE_STUDY_STANDARD.md`. Each report is one complete
+investigation of an algorithm or justified algorithm mixture on the team's
+chosen data. It should teach the method, use student package code, compare with
 a clearly labeled trusted reference, diagnose errors, and state limitations.
 
 ## 6. Work through reviewed branches
