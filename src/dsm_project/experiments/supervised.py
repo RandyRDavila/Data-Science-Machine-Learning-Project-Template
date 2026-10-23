@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.ensemble import (
     GradientBoostingClassifier,
@@ -29,7 +30,12 @@ from dsm_project.contracts import ProjectDataset, TaskKind
 
 @dataclass(frozen=True)
 class ExperimentResult:
-    """Candidate model plus bounded held-out evidence."""
+    """Candidate model plus bounded held-out evidence.
+
+    The holdout fields support diagnostics in executable reports without
+    forcing notebooks to reproduce the package's split logic. They are not
+    written into the promoted model artifact.
+    """
 
     model_name: str
     task_name: str
@@ -39,6 +45,9 @@ class ExperimentResult:
     test_rows: int
     feature_names: tuple[str, ...]
     estimator: BaseEstimator
+    holdout_features: pd.DataFrame
+    observed: np.ndarray
+    predictions: np.ndarray
 
 
 def available_models(kind: TaskKind) -> tuple[str, ...]:
@@ -113,14 +122,19 @@ def _candidate(model_name: str, kind: TaskKind, seed: int) -> BaseEstimator:
     return make_pipeline(StandardScaler(), estimator)
 
 
-def fit_supervised_candidate(
+def evaluate_supervised_estimator(
     dataset: ProjectDataset,
     config: ProjectConfig,
     *,
     task_name: str,
-    model_name: str,
+    estimator_name: str,
+    estimator: BaseEstimator,
 ) -> ExperimentResult:
-    """Fit one declared candidate and evaluate one untouched holdout split."""
+    """Fit an estimator through the shared leakage-resistant example path.
+
+    Student-owned estimators and trusted references use this same boundary so
+    that data partitioning and metric calculation do not silently differ.
+    """
 
     try:
         task = dataset.tasks[task_name]
@@ -140,7 +154,6 @@ def fit_supervised_candidate(
         random_state=seed,
         stratify=stratify,
     )
-    estimator = _candidate(model_name, task.kind, seed)
     estimator.fit(train_x, train_y)
     predictions = estimator.predict(test_x)
     if task.kind is TaskKind.REGRESSION:
@@ -152,12 +165,39 @@ def fit_supervised_candidate(
     if not np.isfinite(metric_value):
         raise RuntimeError("Evaluation produced a non-finite metric")
     return ExperimentResult(
-        model_name=model_name,
+        model_name=estimator_name,
         task_name=task_name,
         metric_name=metric_name,
         metric_value=metric_value,
         train_rows=len(train_x),
         test_rows=len(test_x),
         feature_names=task.feature_columns,
+        estimator=estimator,
+        holdout_features=test_x.copy(),
+        observed=np.asarray(test_y),
+        predictions=np.asarray(predictions),
+    )
+
+
+def fit_supervised_candidate(
+    dataset: ProjectDataset,
+    config: ProjectConfig,
+    *,
+    task_name: str,
+    model_name: str,
+) -> ExperimentResult:
+    """Fit one trusted reference candidate on the shared example split."""
+
+    try:
+        task = dataset.tasks[task_name]
+    except KeyError as error:
+        raise ValueError(f"Unknown task: {task_name}") from error
+    seed = int(config.split.get("random_state", 438))
+    estimator = _candidate(model_name, task.kind, seed)
+    return evaluate_supervised_estimator(
+        dataset,
+        config,
+        task_name=task_name,
+        estimator_name=f"reference:{model_name}",
         estimator=estimator,
     )

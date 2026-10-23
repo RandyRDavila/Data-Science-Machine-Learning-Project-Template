@@ -30,6 +30,10 @@
 
 ## Required evidence
 
+- [ ] Student notebooks under `notebooks/` follow the case-study standard and
+      call reusable project-package code on the configured dataset.
+- [ ] Each method report includes purposeful exploration, mathematical
+      exposition, a baseline or trusted comparison, diagnostics, and limits.
 - [ ] Unit, property, differential, integration, API, and system tests cover
       relevant risks.
 - [ ] Example and project notebooks restart and run from top to bottom.

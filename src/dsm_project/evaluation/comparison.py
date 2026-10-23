@@ -35,7 +35,7 @@ def comparison_table(
         )
         rows.append(
             {
-                "model": model_name,
+                "model": result.model_name,
                 "metric": result.metric_name,
                 "value": result.metric_value,
                 "train_rows": result.train_rows,

@@ -124,6 +124,12 @@ are data leakage in disguise.
 The repository intentionally does not assume that student data can be
 published.
 
+Start with the cross-domain catalog in
+[`docs/PUBLIC_DATA_SOURCES.md`](docs/PUBLIC_DATA_SOURCES.md). It links public
+repositories in science, health, engineering, climate, economics, society,
+transportation, geospatial analysis, and knowledge graphs, with access and
+modeling cautions for each area.
+
 1. Place local files under `data/local/`. Git ignores this directory.
 2. Copy the student configuration example.
 
@@ -186,6 +192,11 @@ transparent exemplar, not permission to copy and rename an implementation.
 
 ## 6. Use notebooks as experimental reports
 
+Follow the full
+[`notebook case-study standard`](docs/NOTEBOOK_CASE_STUDY_STANDARD.md). The goal
+is an accessible technical article backed by professional package code—not a
+code dump and not an unreviewed production system living in notebook state.
+
 The `examples/` notebooks cover the course families and execute in CI:
 
 - data and task contracts;
@@ -198,8 +209,8 @@ The `examples/` notebooks cover the course families and execute in CI:
 - clustering; and
 - dimensionality reduction.
 
-Create project notebooks by adapting the reasoning pattern, not by editing the
-reference notebooks into one enormous stateful file. A project notebook should
+Create project notebooks under `notebooks/` by adapting the reasoning pattern,
+not by editing the reference notebooks into one enormous stateful file. A project notebook should
 load package functions, state a question, display relevant evidence, explain a
 conclusion, and restart successfully from top to bottom. Training, validation,
 API, and monitoring logic belongs under `src/` or `scripts/`.
@@ -308,6 +319,7 @@ artifacts with checksums, and publishes a GitHub release.
 | `data/local/` | Ignored student data; never committed |
 | `data/fixtures/` | Small CI-safe schema and failure examples |
 | `examples/` | Executable instructional and project reports |
+| `notebooks/` | Student-authored, article-style project case studies |
 | `src/dsm_project/data/` | Adapters, validation, provenance, and tasks |
 | `src/dsm_project/algorithms/student/` | Student-authored course algorithms |
 | `src/dsm_project/algorithms/registry.py` | Explicit bridge from student code to the system |

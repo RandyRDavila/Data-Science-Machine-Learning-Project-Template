@@ -6,6 +6,12 @@ same configured data boundary, and run in CI. Where an example calls a
 scikit-learn estimator, it is showing the trusted reference path. Students must
 make their own registered implementation appear alongside that reference.
 
+Each example follows the project case-study arc: motivating question, package
+data boundary, focused exploration, mathematical model, package experiment,
+diagnostics, limitations, and a concrete student extension. Read
+[`docs/NOTEBOOK_CASE_STUDY_STANDARD.md`](../docs/NOTEBOOK_CASE_STUDY_STANDARD.md)
+before creating project notebooks.
+
 | Example | Course topic | Evidence produced |
 | --- | --- | --- |
 | `00-data-and-task-contract.ipynb` | Data, provenance, task, and leakage contracts | schema and task audit |

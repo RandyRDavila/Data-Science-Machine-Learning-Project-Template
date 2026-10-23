@@ -3,6 +3,8 @@
 import numpy as np
 import pytest
 from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 from dsm_project.algorithms import (
     BatchLinearRegressor,
@@ -61,3 +63,15 @@ def test_student_registry_exposes_only_explicit_implementations() -> None:
 
     with pytest.raises(ValueError, match="Unknown student algorithm"):
         create_student_algorithm("logistic_regression")
+
+
+def test_batch_linear_regressor_composes_with_sklearn_pipeline() -> None:
+    features = np.arange(12, dtype=float).reshape(-1, 1)
+    targets = 2.0 * features[:, 0] - 1.0
+    pipeline = make_pipeline(
+        StandardScaler(),
+        BatchLinearRegressor(learning_rate=0.05),
+    ).fit(features, targets)
+
+    assert pipeline.predict(features).shape == targets.shape
+    assert pipeline.get_params()["batchlinearregressor__learning_rate"] == 0.05

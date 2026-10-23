@@ -56,6 +56,11 @@ direction: notebooks may orchestrate, visualize, and explain, but product
 behavior belongs under `src/`. Do not copy large notebook cells into production
 modules without first designing and testing their interfaces.
 
+Create project reports under `notebooks/` and follow
+`docs/NOTEBOOK_CASE_STUDY_STANDARD.md`. Each report should teach the method,
+explore the configured project dataset, use student package code, compare with
+a clearly labeled trusted reference, diagnose errors, and state limitations.
+
 ## 6. Work through reviewed branches
 
 ```bash

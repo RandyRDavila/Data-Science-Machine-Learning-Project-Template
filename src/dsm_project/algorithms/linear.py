@@ -6,9 +6,10 @@ from typing import Self
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
+from sklearn.base import BaseEstimator, RegressorMixin
 
 
-class BatchLinearRegressor:
+class BatchLinearRegressor(RegressorMixin, BaseEstimator):
     """Fit an affine least-squares model using batch gradient descent.
 
     Parameters

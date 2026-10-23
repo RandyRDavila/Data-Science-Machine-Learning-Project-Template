@@ -8,6 +8,7 @@ from dsm_project.data import load_project_dataset
 from dsm_project.evaluation import comparison_table
 from dsm_project.experiments import (
     available_models,
+    evaluate_supervised_estimator,
     fit_supervised_candidate,
     run_clustering_example,
     run_pca_example,
@@ -34,6 +35,33 @@ def test_supervised_reference_paths_produce_finite_evidence() -> None:
     assert np.isfinite(regression.metric_value)
     assert 0.0 <= classification.metric_value <= 1.0
     assert regression.train_rows + regression.test_rows == len(dataset.observations)
+    assert len(regression.observed) == regression.test_rows
+    assert len(regression.predictions) == regression.test_rows
+    assert len(regression.holdout_features) == regression.test_rows
+    assert regression.model_name == "reference:linear_regression"
+
+
+def test_student_and_reference_estimators_share_the_evaluation_boundary() -> None:
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    from dsm_project.algorithms import create_student_algorithm
+
+    config, dataset = configured_example()
+    estimator = make_pipeline(
+        StandardScaler(),
+        create_student_algorithm("batch_linear_regression", learning_rate=0.05),
+    )
+    result = evaluate_supervised_estimator(
+        dataset,
+        config,
+        task_name="regression",
+        estimator_name="student:batch_linear_regression",
+        estimator=estimator,
+    )
+
+    assert result.model_name == "student:batch_linear_regression"
+    assert np.isfinite(result.metric_value)
 
 
 def test_every_declared_classification_family_runs() -> None:
@@ -45,7 +73,10 @@ def test_every_declared_classification_family_runs() -> None:
         model_names=available_models(TaskKind.CLASSIFICATION),
     )
 
-    assert set(table["model"]) == set(available_models(TaskKind.CLASSIFICATION))
+    assert set(table["model"]) == {
+        f"reference:{name}"
+        for name in available_models(TaskKind.CLASSIFICATION)
+    }
     assert table["value"].between(0.0, 1.0).all()
 
 
@@ -57,4 +88,5 @@ def test_unsupervised_paths_do_not_require_targets_for_fitting() -> None:
     assert len(clustering.labels) == len(dataset.observations)
     assert -1.0 <= clustering.stability_ari <= 1.0
     assert representation.coordinates.shape == (len(dataset.observations), 2)
+    assert representation.components.shape == (2, len(representation.feature_names))
     assert 0.0 < representation.explained_variance_ratio.sum() <= 1.0

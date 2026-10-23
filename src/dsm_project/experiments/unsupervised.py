@@ -24,6 +24,8 @@ class ClusteringResult:
     silhouette: float
     stability_ari: float
     external_audit_ari: float | None
+    cluster_centers_scaled: NDArray[np.float64]
+    feature_names: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -32,6 +34,8 @@ class RepresentationResult:
 
     coordinates: NDArray[np.float64]
     explained_variance_ratio: NDArray[np.float64]
+    components: NDArray[np.float64]
+    feature_names: tuple[str, ...]
 
 
 def run_clustering_example(
@@ -48,9 +52,8 @@ def run_clustering_example(
     features = dataset.observations.loc[:, task.feature_columns]
     scaled = StandardScaler().fit_transform(features)
     seed = int(config.split.get("random_state", 438))
-    first = KMeans(
-        n_clusters=clusters, n_init=20, random_state=seed
-    ).fit_predict(scaled)
+    first_model = KMeans(n_clusters=clusters, n_init=20, random_state=seed)
+    first = first_model.fit_predict(scaled)
     second = KMeans(
         n_clusters=clusters, n_init=20, random_state=seed + 1
     ).fit_predict(scaled)
@@ -62,6 +65,8 @@ def run_clustering_example(
         silhouette=float(silhouette_score(scaled, first)),
         stability_ari=float(adjusted_rand_score(first, second)),
         external_audit_ari=external,
+        cluster_centers_scaled=np.asarray(first_model.cluster_centers_, dtype=float),
+        feature_names=task.feature_columns,
     )
 
 
@@ -80,4 +85,6 @@ def run_pca_example(
     return RepresentationResult(
         coordinates=np.asarray(coordinates, dtype=float),
         explained_variance_ratio=np.asarray(pca.explained_variance_ratio_),
+        components=np.asarray(pca.components_, dtype=float),
+        feature_names=task.feature_columns,
     )
